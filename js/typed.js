@@ -222,12 +222,16 @@
 				self.timeout = setTimeout(function() {
 					if (curStrPos === curString.length) {
 						// fires callback function
-						self.options.onStringTyped(self.arrayPos);
+						if(typeof self.options.onStringTyped == 'function') {
+							self.options.onStringTyped.call(self, self.arrayPos);
+						}
 
 						// is this the final string
 						if (self.arrayPos === self.strings.length - 1) {
 							// animation that occurs on the last typed string
-							self.options.callback();
+							if(typeof self.options.callback == 'function') {
+								self.options.callback.call(this);
+							}
 
 							self.curLoop++;
 
@@ -243,8 +247,8 @@
 					} else {
 
 						/* call before functions if applicable */
-						if (curStrPos === 0) {
-							self.options.preStringTyped(self.arrayPos);
+						if (curStrPos === 0 && typeof self.options.preStringTyped == 'function') {
+							self.options.preStringTyped.call(self, self.arrayPos);
 						}
 
 						// start typing each new char into existing string
@@ -424,7 +428,9 @@
 			this.arrayPos = 0;
 			this.curLoop = 0;
 			// Send the callback
-			this.options.resetCallback();
+			if(typeof this.options.resetCallback == 'function') {
+				this.options.resetCallback.call(this);
+			}
 		}
 
 	};
